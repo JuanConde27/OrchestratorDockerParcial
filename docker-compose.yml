@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  orchestration-service:
+    build:
+      context: ./orquestador
+      dockerfile: Dockerfile
+    container_name: orchestration-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - service1
+      - service2
+      - service3
+    networks:
+      - app-network
+
+  service1:
+    build:
+      context: ./ResolveEnigmaAp
+      dockerfile: Dockerfile
+    container_name: service1
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  service2:
+    build:
+      context: ./ResolveEnigmaAp2
+      dockerfile: Dockerfile
+    container_name: service2
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network
+
+  service3:
+    build:
+      context: ./ResolveEnigmaAp3
+      dockerfile: Dockerfile
+    container_name: service3
+    ports:
+      - "8082:8082"
+    networks:
+      - app-network
+      
+  webhook:
+    build:
+      context: ./webhook
+      dockerfile: Dockerfile
+    container_name: webhook-service
+    ports:
+      - "8085:8085"
+    networks:
+      - app-network
+
+  batch:
+    build:
+      context: ./batch
+      dockerfile: Dockerfile
+    container_name: batch-service
+    ports:
+      - "8084:8084"
+    networks:
+      - app-network
+
+    
+
+networks:
+  app-network:
+    driver: bridge
